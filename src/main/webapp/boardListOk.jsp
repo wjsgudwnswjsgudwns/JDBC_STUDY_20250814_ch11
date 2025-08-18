@@ -51,7 +51,7 @@
 			
 			while(rs.next()) {
 				BoardDto boardDto = new BoardDto();
-				boardDto.setBnum(rs.getInt("bnum"));
+				boardDto.setBnum(rs.getString("bnum"));
 				boardDto.setBtitle(rs.getString("btitle"));
 				boardDto.setBcontent(rs.getString("bcontent"));
 				boardDto.setMemberid(rs.getString("memberid"));
