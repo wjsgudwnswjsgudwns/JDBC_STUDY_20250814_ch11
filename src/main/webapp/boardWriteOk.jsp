@@ -1,3 +1,4 @@
+<%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
@@ -27,10 +28,13 @@
 		String password = "12345";
 		
 		//SQL문
-		String sql = "INSERT INTO board(btitle, bcontent, memberid) VALUES ('"+btitle+"','"+bcontent+"','"+memberid+"')";
+		//String sql = "INSERT INTO board(btitle, bcontent, memberid) VALUES ('"+btitle+"','"+bcontent+"','"+memberid+"')";
+		String sql = "INSERT INTO board(btitle, bcontent, memberid) VALUES (?,?,?)";
 		
 		Connection conn = null; // 커넥션 인터페이스를 선언 후 null로 초기화
-		Statement stmt = null; // SQL문을 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언 (SQL문을 실행해주는 객체)
+		//Statement stmt = null; // SQL문을 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언 (SQL문을 실행해주는 객체)
+		PreparedStatement pstmt = null;
+		
 		int result = 0; //글 삽입 성공 여부 저장할 변수
 		
 		try {
@@ -38,17 +42,24 @@
 			
 			conn = DriverManager.getConnection(url, username, password); // 커넥션이 메모리에 생성(DB와 연결 커넥션 conn 생성)
 			
-			stmt = conn.createStatement(); // stmt 인스턴스화
-			result = stmt.executeUpdate(sql); //성공하면 1이 반환, 실패하면 0이 반환
-			int sqlResult = stmt.executeUpdate(sql); // SQL문을 DB에서 실행 -> 성공시 1 반환, 실패시 1이 아닌 값을 반환
+			//stmt = conn.createStatement(); // stmt 인스턴스화
+			pstmt = conn.prepareStatement(sql); // stmt 인스턴스화
+
+			
+			pstmt.setString(1, btitle);
+			pstmt.setString(2, bcontent);
+			pstmt.setString(3, memberid);
+			
+			
+			result = pstmt.executeUpdate(); // SQL문을 DB에서 실행 -> 성공시 1 반환, 실패시 1이 아닌 값을 반환
 			
 		} catch (Exception e){
 			out.println("DB 에러 발생. 회원가입 실패.");
 			e.printStackTrace();
 		} finally { // 에러 발생여부와 상관없이 Connection 닫기 실행
 			try {
-				if(stmt != null) { // stmt가 null이 아니면 닫기. conn 닫기보다 먼저 실행 되어야만 함
-					stmt.close();
+				if(pstmt != null) { // stmt가 null이 아니면 닫기. conn 닫기보다 먼저 실행 되어야만 함
+					pstmt.close();
 				}
 				if (conn != null) { // Connection이 null이 아닐때만 닫기 실행
 					conn.close();
@@ -59,7 +70,7 @@
 		}
 		
 		if(result == 1) { //참이면 글쓰기 성공->글 목록 출력 화면으로 이동
-			RequestDispatcher dispatcher = request.getRequestDispatcher("boardWriteList.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("boardListOk.jsp");
 			dispatcher.forward(request, response);
 		}
 		
