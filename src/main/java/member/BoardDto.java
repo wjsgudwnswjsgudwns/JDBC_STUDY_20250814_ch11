@@ -2,7 +2,7 @@ package member;
 
 public class BoardDto {
 
-	private String bnum;
+	private int bnum;
 	private String btitle;
 	private String bcontent;
 	private String memberid;
@@ -12,7 +12,7 @@ public class BoardDto {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public BoardDto(String bnum, String btitle, String bcontent, String memberid, String bdate, String membername) {
+	public BoardDto(int bnum, String btitle, String bcontent, String memberid, String bdate, String membername) {
 		super();
 		this.bnum = bnum;
 		this.btitle = btitle;
@@ -21,10 +21,10 @@ public class BoardDto {
 		this.bdate = bdate;
 		this.membername = membername;
 	}
-	public String getBnum() {
+	public int getBnum() {
 		return bnum;
 	}
-	public void setBnum(String bnum) {
+	public void setBnum(int bnum) {
 		this.bnum = bnum;
 	}
 	public String getBtitle() {
