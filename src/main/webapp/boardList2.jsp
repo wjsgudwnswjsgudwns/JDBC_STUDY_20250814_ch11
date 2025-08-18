@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글목록 조회</title>
+<title>글목록</title>
 </head>
 <body>
 	<%

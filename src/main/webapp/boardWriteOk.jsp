@@ -31,6 +31,7 @@
 		
 		Connection conn = null; // 커넥션 인터페이스를 선언 후 null로 초기화
 		Statement stmt = null; // SQL문을 관리해주는 객체를 선언해주는 인터페이스로 stmt 선언 (SQL문을 실행해주는 객체)
+		int result = 0; //글 삽입 성공 여부 저장할 변수
 		
 		try {
 			Class.forName(driverName); // MySQL 드라이버 클래스 불러오기
@@ -38,7 +39,7 @@
 			conn = DriverManager.getConnection(url, username, password); // 커넥션이 메모리에 생성(DB와 연결 커넥션 conn 생성)
 			
 			stmt = conn.createStatement(); // stmt 인스턴스화
-			
+			result = stmt.executeUpdate(sql); //성공하면 1이 반환, 실패하면 0이 반환
 			int sqlResult = stmt.executeUpdate(sql); // SQL문을 DB에서 실행 -> 성공시 1 반환, 실패시 1이 아닌 값을 반환
 			
 		} catch (Exception e){
@@ -56,7 +57,15 @@
 				e.printStackTrace();
 			}
 		}
-	
+		
+		if(result == 1) { //참이면 글쓰기 성공->글 목록 출력 화면으로 이동
+			RequestDispatcher dispatcher = request.getRequestDispatcher("boardWriteList.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+		//request.setAttribute("boardList", boardList);
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("boardList.jsp");
+		//dispatcher.forward(request, response);
 	%>
 	
 	<a href="boardWrite.jsp">글 쓰기</a>
